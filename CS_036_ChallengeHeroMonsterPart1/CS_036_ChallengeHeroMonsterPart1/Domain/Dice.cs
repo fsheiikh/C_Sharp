@@ -10,6 +10,7 @@ namespace CS_036_ChallengeHeroMonsterPart1
         public int Sides { get; set; }
 
         Random random = new Random();
+
         public int Roll()
         {
             return random.Next(Sides);

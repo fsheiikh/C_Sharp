@@ -47,7 +47,7 @@ namespace CS_036_ChallengeHeroMonsterPart1
         public int Health { get; set; }
         public string Name { get; set; }
         
-        //abstarct must be overridden 
+        //abstract must be overridden 
         public abstract int Attack(Dice dice);
 
         //virtual can be overriden but is not required
@@ -58,6 +58,7 @@ namespace CS_036_ChallengeHeroMonsterPart1
 
     }
 
+    [Serializable]
     public class Hero : Character
     {
         bool AttackBonus = true;
@@ -75,12 +76,12 @@ namespace CS_036_ChallengeHeroMonsterPart1
         }
     }
 
+    [Serializable]
     public class Monster : Character
     {
         
         public override int Attack(Dice dice)
         {
-           
             return dice.Roll();
         }
     }

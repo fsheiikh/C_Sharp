@@ -1,6 +1,7 @@
 # EpicU4-FarhanS
 http://430-farhan.vm.epicservers.com/ <br>
-http://430-farhan.vm.epicservers.com/casino
+http://430-farhan.vm.epicservers.com/casino <br>
+http://430-farhan.vm.epicservers.com/darts2 
 
 #Cheat Sheet
 9/10
@@ -436,3 +437,155 @@ of the namespace of the class you want to use, even if its n the same
 project.
 
 Deafult 
+
+C# Working with the List Collecton (CS-ASP_046)
+==================================
+10/8
+
+use generic collections to work with items in a strongly typed fashion.
+
+Btter than arrays:
+Know the  type of item for a certainty, no castng/converting
+Better performance inserting / removing / updating
+Collections provide more flexible options to access items in the collecito.
+Allows for LINQ extension methods
+
+Many differect types of collections - specialties
+
+"Generic Collections"
+List<T>
+Dictionary<Tkey, Tvalue>
+t=> data type you need 
+"You make a generic specific by providing a data type"
+
+List<string> - only store strings (strongly typed)
+List<Car> - only store Cars in that collection
+
+//Assume I have three objects : car1, car2, car3
+List<Car> car = new List<Car>();
+cars.Add(car1);
+cars.Add(car2);
+cars.Add(car3);
+
+int numberOfCars = cars.Count;
+Car myCar = cars.ElementAt(1); //return secodn car in collection
+
+//Terminology: You access a MEMBER of a collection, you access a ELEMENT of an array
+
+//LINQ queries 
+
+
+C# Object Initializer (CS-ASP_047)
+==================================
+10/8
+
+Concise way to initilaize a new object (or collection) with values.
+
+//Didn't talk about this form: 
+
+Car car1 = new Car() {Make = "BMW", Model = "528i", Year= 2010, Color = "Black"};
+
+//no local variable name fo rthe new CAr instacne needed!
+cars.Add(new Car() {Make = "BMW", Model = "528i", Year= 2010, Color = "Black"});
+
+
+C# Collection Initializer (CS-ASP_048)
+==================================
+10/8
+
+Shortcut to create a new instance of a generic collection AND initilaze it by 
+IMMEDIATELY adding new instances of a given type.
+
+List<Car> cars = new List<Car>(){
+  new Car{Make="BMW", Model="528i", Color="Black", Year="2010"},
+  new Car{Make="BMW", Model="528i", Color="Black", Year="2010"},
+  new Car{Make="BMW", Model="528i", Color="Black", Year="2010"},
+};
+
+
+
+Working with the Dictionary<TKey, TValue> Collection (CS_ASP_049)
+=================================================================
+Dictionary allows you to use a key to access a memeber of the collection.
+Think: Webster Dictionary .... the word (key), then the definition (instance of a given type)
+Key is anything meaningful in YOUR system
+Key must be unique 
+
+TKey => type of they key 
+TValue => Type of the value
+
+Dictionary<string, Car> car = new Dictionary<string, Car()>;
+cars.Add("V123", new Car{Make="BMW", Model="528i", Color="Black", Year="2010"});
+cars.Add("V234", new Car{Make="BMW", Model="528i", Color="Black", Year="2010"});
+cars.Add("V345", new Car{Make="BMW", Model="528i", Color="Black", Year="2010"});
+
+cars.ElementAt(1).Key // Return "V234"
+cars.ElementAt(1).Value // Returns the Car object in teh 2nd position
+
+//Better wya to acess Dictionary
+Car v2;
+if(car.TryGetValue("V234", out v2))
+{
+  result += v2.Year ...; 
+}
+
+//Remove an item 
+if(cars.Remove("V345"))
+{
+  result += "Succesfuly removeed car";
+}
+
+
+Looping with a foreach Iteration Statement (CS-ASP_050)
+==========================================================
+More elegant way of iterating through collections.
+
+Code snippet: foreach [tab][tab]
+
+foreach(Car car in cars) {
+  result += car.Make;
+}
+
+
+Implicitly Typed Local variables with the 'var' Keyword (CS-ASP_51)
+==================================================================
+(Applies to locally scoped variable declarations)
+COmpiler is smart enough to figure out the data type when you initilaze the variable.
+Becomes increasingly important because sometimes its difficult to know what the data 
+type is supposd to be . (LINQ)
+
+int hitPoints = 0;
+.... is the equivalent of ....
+var hitPoints = 0;
+
+string heroName = "Pentagorn";
+...is teh equivalent of ...
+var heroName = "Pentagorn"
+
+var Cars = new List<Car>
+{
+...
+
+}
+
+Rules: 
+1. Must initilize the variable.
+2. Variable is permamently set to the implicit data type.
+3. Can't be used for a PUBLIC property / variable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
