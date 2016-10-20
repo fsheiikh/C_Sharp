@@ -5,20 +5,23 @@ using System.Web;
 
 namespace CS_051_MegaChallengeWar
 {
+   
     interface ICard
     {
         string name { get; set; }
     }
 
-
+    [Serializable]
     public class Card : ICard
     {   
         public string name {get; set;}
         public Suit suit { get; set;}
         public Value value { get; set;}
+        public string image { get; set; }
 
     }
 
+    //used Enums to control what values could be set in cards
     public enum Suit
     {
         Hearts,

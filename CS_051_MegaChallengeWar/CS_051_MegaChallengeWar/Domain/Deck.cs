@@ -5,61 +5,49 @@ using System.Web;
 
 namespace CS_051_MegaChallengeWar.Domain
 {
-
+    
     interface IDeck
     {
-        List<Card> deckOfCards { get; set; }
+        List<Card> cards { get; set; }
     }
 
-
+    [Serializable]
     public class Deck : IDeck
     {
-        public List<Card> deckOfCards { get; set; }
+        public List<Card> cards { get; set; }
         
 
         public Deck()
         {
-            deckOfCards = new List<Card>();
-            setDeck();
-
+            cards = new List<Card>();
         }
         
-        //use enums to create 52 cards
+
+        //use enums to create 52 cards, Not in constructor because players have different decks
         public void setDeck()
         {
             foreach (Suit s in Enum.GetValues(typeof(Suit)))
             {
                 foreach (Value v in Enum.GetValues(typeof(Value)))
                 {
-                    deckOfCards.Add(new Card {name= v + " of " + s, suit = s, value = v });
+                    cards.Add(new Card {name= v + " of " + s, suit = s, value = v , image = v + "" +  s + ".png"});
                 }
             }
         }
 
 
-
-        Random random = new Random();
-
         //fisher yates shuffle
-        public void shuffleDeck()
+        public void shuffleDeck(Random random)
         {
             
-            for (int i = deckOfCards.Count; i > 1; i--)
+            for (int i = cards.Count; i > 1; i--)
             {
                 int pos = random.Next(i);
-                var x = deckOfCards[i - 1];
-                deckOfCards[i - 1] = deckOfCards[pos];
-                deckOfCards[pos] = x;
+                var x = cards[i - 1];
+                cards[i - 1] = cards[pos];
+                cards[pos] = x;
             }
-
-
         }
-
-
     }
-
-   
-
-
 
 }

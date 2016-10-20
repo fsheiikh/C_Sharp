@@ -5,51 +5,53 @@ using System.Web;
 
 namespace CS_051_MegaChallengeWar.Domain
 {
+    [Serializable]
     public class Game
     {
         public Player player1 { get; set; }
         public Player player2 {get; set;}
-
         public Deck deck { get; set;}
+        Random random = new Random();
+
 
         public Game()
         {
             deck = new Deck();
-            deck.shuffleDeck();
+            deck.setDeck();
+            deck.shuffleDeck(random);
         }
 
-        //sets player instances and initiliazes decks. NEEDS TO BE REFACTORED 
+
+        //sets player instances . NEEDS TO BE REFACTORED (maybe use list of players instead)
         public void setPlayers(string player1Name, string player2Name)
         {
             player1 = new Player(player1Name);
-            player2 = new Player(player2Name);
-            
+            player2 = new Player(player2Name);   
         }
 
 
-        public void splitDeck()
-        {   
-            player1.deck.deckOfCards = (deck.deckOfCards.Take(26)).ToList();
-
-            player2.deck.deckOfCards = (deck.deckOfCards.Skip(26).Take(26)).ToList();
-
-            
+        //splits deck in half and gives first half to first players and the other half to player 2
+        public void splitDeckBetweenPlayers()
+        {
+            int halfOfDeck = deck.cards.Count / 2;
+            player1.deck.cards = deck.cards.Take(halfOfDeck).ToList();
+            player2.deck.cards = deck.cards.Skip(halfOfDeck).Take(halfOfDeck).ToList();
+    
         }
 
-        public string allCardsInDeck(Deck deck)
+
+        //get list of all cards in deck
+        public string allCardsInDeck(List<Card> cards)
         {
             string result = "";
-
-            foreach (Card card in deck.deckOfCards)
-            {
-                result += card.name + "<br>";
-
-            }
-
-            return result;
-
-        }
-
        
+            foreach (Card card in cards)
+            {
+                result += "<img src=" + "Images/" + card.image + ">" 
+                        + card.name + "<br>" + "<br>";
+               
+            }
+            return result;
+        }  
     }
 }

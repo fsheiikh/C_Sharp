@@ -10,71 +10,116 @@ using System.Web.UI.WebControls;
 namespace CS_051_MegaChallengeWar
 {
     public partial class Default : System.Web.UI.Page
-    {   
+    {
+        Random random = new Random();
+        War war;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Card card = new Card { power=10, suit=Suit.Hearts, value=Value.King};
 
-            //Label1.Text = card.power.ToString() + " " + card.suit + card.value;
+            if (!Page.IsPostBack)
+            {
+                Game game = new Game();
+                game.setPlayers("Player1", "Player 2");
+                game.splitDeckBetweenPlayers();
 
-            //Deck deck = new Deck();
-            //if (deck.cards.FirstOrDefault().Value < deck.cards["second"])
-            //    Label1.Text = "yes";
+                war = new War(game);
 
-            //Deck deck = new Deck();
-            //deck.initialize();
-            //deck.deckOfCards = new List<Card>();
-            //deck.setDeck();
-            //Card card = deck.deckOfCards.FirstOrDefault();
-            //deck.shuffleDeck();
-            //Card card = deck.deckOfCards.Skip(3).FirstOrDefault();
-            //int num = (int)card.value;
-            // string num = card.name;
+                ViewState["War"] = war;
 
-            Game game = new Game();
-            game.setPlayers("Junto", "Punto");
-            
-            Label1.Text = game.deck.deckOfCards.FirstOrDefault().name.ToString();
-            
-            game.splitDeck();
+            }
+            else
+            {   
+                var war = (War)ViewState["War"];
+                displayDeckTotals();
 
-            Label1.Text += "____" + game.deck.deckOfCards.FirstOrDefault().name.ToString();
-
-            Label1.Text += "____" + game.player1.deck.deckOfCards.FirstOrDefault().name.ToString();
-            Label1.Text += "____" + game.player2.deck.deckOfCards.FirstOrDefault().name.ToString();
-
-            Label2.Text = game.allCardsInDeck(game.player1.deck);
-
-            Label3.Text = game.allCardsInDeck(game.player2.deck);
-
-            game.player2.deck.deckOfCards.RemoveAt(0);
-            Label4.Text = game.allCardsInDeck(game.player2.deck);
-
-            War war = new War();
-            war.game = game;
-
-            
-                war.startWar(game.player1.deck.deckOfCards.FirstOrDefault(), game.player2.deck.deckOfCards.FirstOrDefault());
-
-                Label5.Text += war.bounty1.name + "VS" + war.bounty2.name + "<br>" + "<br/>";
-
-                Label5.Text += war.game.allCardsInDeck(game.player1.deck) + "<br>";
-
-                Label5.Text += war.game.allCardsInDeck(game.player2.deck);
-            
-
-                
-
-            
-
-
-
+            }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+
+
+        protected void Button1_Click1(object sender, EventArgs e)
         {
-           
+            var war = (War)ViewState["War"];
+            if (!isDeckEmpty()) return;
+
+            war.setBounty();
+            displayDeckTotals();
+            displayBucketAndBounty();
+            setImages();
+            
+        }
+
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {   
+            var war = (War)ViewState["War"];
+
+            if (!isGameReady()) return;
+            else
+            {
+                Label5.Text += war.startWar() + "<br>";
+                displayDeckTotals();
+                displayBucketAndBounty();
+            }
+        }
+
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            if (!isDeckEmpty()) return;
+            shuffleDecks(random);
+            displayDeckTotals();
+        }
+
+
+
+        public void shuffleDecks(Random random)
+        {
+            var war = (War)ViewState["War"];
+            war.game.player1.deck.shuffleDeck(random);
+            war.game.player2.deck.shuffleDeck(random);
+        }
+
+
+        public void displayDeckTotals()
+        {
+            var war = (War)ViewState["War"];
+            Label1.Text = war.game.allCardsInDeck(war.game.player1.deck.cards);
+            Label2.Text = war.game.allCardsInDeck(war.game.player2.deck.cards);
+        }
+
+
+        public void displayBucketAndBounty()
+        {
+            var war = (War)ViewState["War"];
+            Label3.Text = war.getTestCards() + "<br>";
+            Label4.Text = war.getBucket() + "<br>";
+        }
+
+
+        public bool isGameReady()
+        {
+            var war = (War)ViewState["War"];
+            if (war.testCard1 !=null && war.testCard2 != null)
+                return true;
+            else return false;
+        }
+
+
+        public bool isDeckEmpty()
+        {
+            var war = (War)ViewState["War"];
+            if (war.game.player1.deck.cards.Count >= 1 && war.game.player2.deck.cards.Count >= 1)
+                return true;
+            else return false;
+        }
+
+        public void setImages()
+        {
+            var war = (War)ViewState["War"];
+            Image1.ImageUrl = "~/Images/" + war.testCard1.image;
+            Image2.ImageUrl = "~/Images/" + war.testCard2.image;
         }
     }
 }

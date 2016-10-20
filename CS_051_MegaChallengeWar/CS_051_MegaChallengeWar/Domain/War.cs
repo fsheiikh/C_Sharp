@@ -4,95 +4,116 @@ using System.Linq;
 using System.Web;
 
 namespace CS_051_MegaChallengeWar.Domain
-{
+{   
+    [Serializable]
     public class War
-    {
+    {   
         public Game game { get; set; }
-        public Card bounty1 { get; set; }
-        public Card bounty2 { get; set; }
+        public List<Card> bucket { get; set; }
+        public Card testCard1 { get; set; }
+        public Card testCard2 { get; set; }
 
-        //cardsRisk are the range of cards from either deck that are on the line in a war
-        List<Card> cardsRisk1 { get; set; }
-        List<Card> cardsRisk2 { get; set; }
-
-        
-
-
-        public string startWar(Card player1Card, Card player2Card)
+        public War(Game gameInstance)
         {
-            bounty1 = player1Card;
-            bounty2 = player2Card;
+            game = gameInstance;
+            bucket = new List<Card>();
+        }
 
-            if ((int)bounty1.value > (int)bounty2.value)
+
+        //sets two test cards(1 from eAch player), adds them both to the stake bucket, and removes them from players deck
+        public void setBounty()
+        {
+            testCard1 = game.player1.deck.cards.FirstOrDefault();
+            testCard2 = game.player2.deck.cards.FirstOrDefault();
+
+            bucket.Add(testCard1);
+            bucket.Add(testCard2);
+
+            game.player1.deck.cards.RemoveAt(0);
+            game.player2.deck.cards.RemoveAt(0);
+        }
+
+
+        //test both test cards and calls playerWins method depending on who wins
+        public string startWar()
+        {
+
+            if ((int)testCard1.value > (int)testCard2.value)
             {
-                game.player1.deck.deckOfCards.Add(bounty2);
-                game.player2.deck.deckOfCards.Remove(bounty2);
-
-                game.player1.deck.deckOfCards.Remove(bounty1);
-                game.player1.deck.deckOfCards.Add(bounty1);
-                return "Player 1 Wins";
+                playerWins(game.player1);
+                return "Player 1 wins";
             }
-            else if ((int)bounty1.value < (int)bounty2.value)
+            else if ((int)testCard1.value < (int)testCard2.value)
             {
-                game.player2.deck.deckOfCards.Add(bounty1);
-                game.player1.deck.deckOfCards.Remove(bounty1);
-
-                game.player2.deck.deckOfCards.Remove(bounty2);
-                game.player2.deck.deckOfCards.Add(bounty2);
-                return "Player 2 Wins";
-
+                playerWins(game.player2);
+                return "Player 2 wins";
             }
-            else if ((int)bounty1.value == (int)bounty2.value)
-            {
-                tiedWar(player1Card, player2Card);
+            else {
+                 return tiedGame();
                 
-
             }
-
-            return " ";
-
         }
 
-        public void tiedWar(Card player1Card, Card player2Card)
+
+        //adds cards in stake bucket to winner and empties bucket afterwards
+        public void playerWins(Player player)
         {
-            int cardLocation = game.player1.deck.deckOfCards.FindIndex(c => c == player1Card);
-            int cardLocation2 = game.player2.deck.deckOfCards.FindIndex(c => c == player1Card);
-            int bountyIndex1, bountyIndex2;
-
-            bounty1 = game.player1.deck.deckOfCards.Skip(cardLocation+3).Take(1).Single();
-            bounty2 = game.player2.deck.deckOfCards.Skip(cardLocation2+3).Take(1).Single();
-
-            bountyIndex1 = game.player1.deck.deckOfCards.FindIndex(c => c == bounty1);
-            cardsRisk1 = game.player1.deck.deckOfCards.GetRange(0, bountyIndex1 - 1);
-
-            bountyIndex2 = game.player2.deck.deckOfCards.FindIndex(c => c == bounty2);
-            cardsRisk2 = game.player1.deck.deckOfCards.GetRange(0, bountyIndex2 - 1);
-
-
-            if (startWar(bounty1, bounty2) == "Player 1 Wins")
+            foreach (Card card in bucket)
             {
-
-                game.player1.deck.deckOfCards.RemoveRange(0, bountyIndex1 - 1);
-                game.player1.deck.deckOfCards.AddRange(cardsRisk1);
-                game.player1.deck.deckOfCards.AddRange(cardsRisk2);
-
-                game.player2.deck.deckOfCards.RemoveRange(0, bountyIndex2 - 1);
+                player.deck.cards.Add(card);
             }
-            else if (startWar(bounty1, bounty2) == "Player 2 Wins")
+            emptyBucket();
+        }
+
+
+        //empties bucket, NEED TO BE REWRITTEN
+        public void emptyBucket()
+        {
+            bucket.RemoveAll(b => (int)b.value > 0);
+        }
+
+
+        //If game ties, this method is called and adds three cards from each players deck to stake bucket
+        //and removes them from the players deck
+        public string tiedGame()
+        {
+            for (int i = 0; i <= 2; i++)
             {
-                game.player2.deck.deckOfCards.RemoveRange(0, bountyIndex2 - 1);
-                game.player2.deck.deckOfCards.AddRange(cardsRisk2);
-                game.player2.deck.deckOfCards.AddRange(cardsRisk1);
-
-                game.player1.deck.deckOfCards.RemoveRange(0, bountyIndex1 - 1);
+                bucket.Add(game.player1.deck.cards.ElementAt(i));
+                bucket.Add(game.player2.deck.cards.ElementAt(i));
             }
-           
 
+            game.player1.deck.cards.RemoveRange(0, 2);
+            game.player2.deck.cards.RemoveRange(0, 2);
 
+            //The two method calls below are only activated if the game is run in a loop, 
+            //for our case we have buttons that call the methods so they do not need to be called 
+            //setBounty()
+            //startWar()
+
+            return "tied";
         }
 
 
 
+        //both methods below print string of cards for test and stake
+        public string getTestCards()
+        {
+            return testCard1.name + " Vs " + testCard2.name;
+        }
+
+
+        public string getBucket()
+        {
+            string result = "";
+
+            foreach (Card card in bucket)
+            {
+                result += card.name + "<br>";
+
+            }
+            return result;
+        }
 
     }
 }

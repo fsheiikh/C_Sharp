@@ -1,8 +1,12 @@
 # EpicU4-FarhanS
+
+#Deployed Apps <hr>
 http://430-farhan.vm.epicservers.com/ <br>
 http://430-farhan.vm.epicservers.com/casino <br>
-http://430-farhan.vm.epicservers.com/darts2 
+http://430-farhan.vm.epicservers.com/darts2 <br>
+http://430-farhan.vm.epicservers.com/war <br>
 
+<hr>
 #Cheat Sheet
 9/10
 

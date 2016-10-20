@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web;
 
 namespace CS_051_MegaChallengeWar.Domain
-{   
-
+{
+    [Serializable]
     public class Player
     {
         public string name { get; set;}
