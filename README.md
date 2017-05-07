@@ -8,10 +8,6 @@ http://430-farhan.vm.epicservers.com/war <br>
 http://430-farhan.vm.epicservers.com/final
 
 
-https://github.com/fsheiikh/fsheiikh.github.io <--repo<br>
-https://fsheiikh.github.io <--links for html pages
-
-
 <hr>
 #Cheat Sheet
 9/10
